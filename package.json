@@ -4,7 +4,7 @@
   "description": "Ethereum blockchain watcher library.",
   "main": "index.js",
   "scripts": {
-    "test": "npm test"
+    "test": "node test/*"
   },
   "bin": {
     "ethwatcher": "./bin/ethwatcher"
@@ -29,6 +29,6 @@
     "simple-yaml-config": "^0.1.0"
   },
   "devDependencies": {
-    "tap": "^11.1.2"
+    "tape": "^4.9.0"
   }
 }

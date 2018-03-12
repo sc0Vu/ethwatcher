@@ -4,7 +4,7 @@
   "description": "Ethereum blockchain watcher library.",
   "main": "index.js",
   "scripts": {
-    "test": "node test/*"
+    "test": "node test.js"
   },
   "bin": {
     "ethwatcher": "./bin/ethwatcher"

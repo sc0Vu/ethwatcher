@@ -4,7 +4,7 @@
   "description": "Ethereum blockchain watcher library.",
   "main": "index.js",
   "scripts": {
-    "test": "node test.js"
+    "test": "./node_modules/.bin/istanbul cover test.js"
   },
   "bin": {
     "ethwatcher": "./bin/ethwatcher"
@@ -26,7 +26,8 @@
   "dependencies": {
     "chalk": "^2.3.2",
     "commander": "^2.15.0",
-    "simple-yaml-config": "^0.1.0"
+    "simple-yaml-config": "^0.1.0",
+    "istanbul": "^1.0.0-alpha.2"
   },
   "devDependencies": {
     "tape": "^4.9.0"

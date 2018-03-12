@@ -1,0 +1,19 @@
+language: node_js
+
+node_js:
+  - "7"
+  - "8"
+
+install:
+  - npm install
+  - npm install -g codecov
+
+after_success:
+  - codecov --token=3f6d843d-9486-49c0-b7ec-f716893838b1
+
+notifications:
+  email:
+    recipients:
+      - alk03073135@gmail.com
+    on_success: always
+    on_failure: always

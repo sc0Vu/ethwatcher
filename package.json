@@ -26,8 +26,9 @@
   "dependencies": {
     "chalk": "^2.3.2",
     "commander": "^2.15.0",
+    "istanbul": "^1.0.0-alpha.2",
     "simple-yaml-config": "^0.1.0",
-    "istanbul": "^1.0.0-alpha.2"
+    "web3": "^1.0.0-beta.33"
   },
   "devDependencies": {
     "tape": "^4.9.0"

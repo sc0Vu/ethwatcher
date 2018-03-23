@@ -1,0 +1,85 @@
+#!/usr/bin/env node
+'use strict'
+
+const program = require('commander');
+const assert = require('assert');
+const path = require('path');
+const Config = require('simple-yaml-config');
+const pkg = require('../package.json');
+const validator = require('../lib/validator');
+const log = require('../lib/log');
+const Eth = require('web3-eth');
+const confirmed = require('../lib/confirmed');
+
+program
+  .version(pkg.version)
+  .option('-h, --host [host]', 'Ethereum blockchain rpc host.', 'localhost')
+  .option('-p, --port [port]', 'Ethereum blockchain rpc port.', 8545)
+  .option('-t, --type [type]', 'Ethereum blockchain rpc connection type.', 'http')
+  .option('-c, --config [config]', 'Config file.')
+  .option('-s, --txHash [txHash]', 'Ethereum transaction hash.')
+  .option('-n, --numberCount [numberCount]', 'Confirmed number count times.', 1)
+  .parse(process.argv);
+
+let host = program.host;
+let port = program.port;
+let type = program.type;
+let txHash = program.txHash;
+let numberCount = program.numberCount;
+
+function checkParams() {
+  if (validator.isHost(host) !== true) {
+    log.error('Please enter valid host.');
+    process.exit();
+  }
+  if (validator.isPort(port) !== true) {
+    log.error('Please enter valid port.');
+    process.exit();
+  }
+  if (validator.isType(type) !== true) {
+    log.error('Please enter valid type.');
+    process.exit();
+  }
+  if (txHash === undefined) {
+    log.error('Please enter txHash.');
+    process.exit();
+  }
+  if (validator.isTransactionHash(txHash) !== true) {
+    log.error('Please enter valid txHash.');
+    process.exit();
+  }
+}
+if (program.config !== undefined) {
+  // load config
+  const config = new Config();
+
+  config.load(program.config).then((configData) => {
+    if (configData.host) {
+      host = configData.host;
+    }
+    if (configData.port) {
+      port = configData.port;
+    }
+    if (configData.type) {
+      type = configData.type;
+    }
+  }).catch((err) => {
+    log.warn(`Load config failed: ${err.message}`);
+  }).then(() => {
+    log.info('Start to check params');
+    checkParams();
+    const eth = new Eth(`${type}://${host}:${port}`);
+
+    confirmed(eth, txHash, numberCount).then((confirmed) => {
+      if (confirmed === true) {
+        log.info(`${txHash} had been confirmed ${numberCount} times.`);
+      } else {
+        log.error('Please check your environment.');
+      }
+    }).catch((err) => {
+      log.error(`Confirm error: ${err.message}`);
+    });
+  }).catch((err) => {
+    log.error(`Error: ${err.message}`);
+  });
+}

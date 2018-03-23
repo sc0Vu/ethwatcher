@@ -7,4 +7,5 @@ const pkg = require('../package.json');
 program
   .version(pkg.version)
   .command('config', 'Create the ethwatcher tool config.')
+  .command('confirmed', 'Check the transaction is confirmed.')
   .parse(process.argv);

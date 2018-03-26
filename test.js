@@ -1,9 +1,10 @@
 const fs = require('fs-extra');
 const path = require('path');
 const testDir = path.join(__dirname, 'test');
+const log = require('./lib/log');
 
 function runTestDirectory(directory) {
-  console.log(`Start to run test directory: ${directory}`);
+  log.info(`Start to run test directory: ${directory}`);
 
   fs.readdir(directory)
     .then((files) => {
@@ -20,21 +21,21 @@ function runTestDirectory(directory) {
             runTestFile(directory, file);
           }
         } catch(e) {
-          console.log(`Stat ${file} error: ${e.message}`);
+          log.error(`Stat ${file} error: ${e.message}`);
         }
       });
     })
     .catch((err) => {
-      console.log(`Read directory error: ${err.message}`);
+      log.error(`Read directory error: ${err.message}`);
     });
 }
 
 function runTestFile(directory, file) {
-  console.log(`Start to run test ${file}`);
+  log.info(`Start to run test ${file}`);
   try {
     require(path.join(directory, file));
   } catch(e) {
-    console.log(`Run test failed, directory: ${directory}, file: ${file}, error: ${e.message}`);
+    log.error(`Run test failed, directory: ${directory}, file: ${file}, error: ${e.message}`);
   }
 }
 

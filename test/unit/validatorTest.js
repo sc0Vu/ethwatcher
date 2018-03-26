@@ -2,6 +2,7 @@ const tape = require('tape');
 const validator = require('../../lib/validator');
 
 tape('lib/validator', (t) => {
+
   // isHost
   t.equals(true, validator.isHost('localhost'));
   t.equals(true, validator.isHost('127.0.0.1'));

@@ -24,6 +24,7 @@ function runTestDirectory(directory) {
           log.error(`Stat ${file} error: ${e.message}`);
         }
       });
+      // log.info('Exit');
     })
     .catch((err) => {
       log.error(`Read directory error: ${err.message}`);

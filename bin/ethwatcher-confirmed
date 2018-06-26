@@ -49,9 +49,26 @@ function checkParams() {
     process.exit();
   }
 }
+
+function isTxConfirmed() {
+  log.info('Start to check params');
+  checkParams();
+  const eth = new Eth(`${type}://${host}:${port}`);
+
+  confirmed(eth, txHash, numberCount).then((confirmed) => {
+    if (confirmed === true) {
+      log.info(`${txHash} had been confirmed ${numberCount} times.`);
+    } else {
+      log.error('Please check your environment.');
+    }
+  }).catch((err) => {
+    log.error(`Confirm error: ${err.message}`);
+  });
+}
+
 if (program.config !== undefined) {
   // load config
-  const config = new Config();
+  let config = new Config();
 
   config.load(program.config).then((configData) => {
     if (configData.host) {
@@ -66,20 +83,10 @@ if (program.config !== undefined) {
   }).catch((err) => {
     log.warn(`Load config failed: ${err.message}`);
   }).then(() => {
-    log.info('Start to check params');
-    checkParams();
-    const eth = new Eth(`${type}://${host}:${port}`);
-
-    confirmed(eth, txHash, numberCount).then((confirmed) => {
-      if (confirmed === true) {
-        log.info(`${txHash} had been confirmed ${numberCount} times.`);
-      } else {
-        log.error('Please check your environment.');
-      }
-    }).catch((err) => {
-      log.error(`Confirm error: ${err.message}`);
-    });
+    isTxConfirmed();
   }).catch((err) => {
     log.error(`Error: ${err.message}`);
   });
+} else {
+  isTxConfirmed();
 }

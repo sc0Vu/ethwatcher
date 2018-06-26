@@ -1,0 +1,94 @@
+#!/usr/bin/env node
+'use strict'
+
+const program = require('commander');
+const assert = require('assert');
+const path = require('path');
+const Config = require('simple-yaml-config');
+const pkg = require('../package.json');
+const validator = require('../lib/validator');
+const log = require('../lib/log');
+const Eth = require('web3-eth');
+const watch = require('../lib/watch');
+
+program
+  .version(pkg.version)
+  .option('-h, --host [host]', 'Ethereum blockchain rpc host.', 'localhost')
+  .option('-p, --port [port]', 'Ethereum blockchain rpc port.', 8545)
+  .option('-t, --type [type]', 'Ethereum blockchain rpc connection type.', 'http')
+  .option('-c, --config [config]', 'Config file.')
+  .option('-a, --address [address]', 'Ethereum address.')
+  .parse(process.argv);
+
+let host = program.host;
+let port = program.port;
+let type = program.type;
+let address = program.address;
+
+function checkParams() {
+  if (validator.isHost(host) !== true) {
+    log.error('Please enter valid host.');
+    process.exit();
+  }
+  if (validator.isPort(port) !== true) {
+    log.error('Please enter valid port.');
+    process.exit();
+  }
+  if (validator.isType(type) !== true) {
+    log.error('Please enter valid type.');
+    process.exit();
+  }
+  if (address === undefined) {
+    log.error('Please enter address.');
+    process.exit();
+  }
+  if (validator.isAddress(address) !== true) {
+    log.error('Please enter valid address.');
+    process.exit();
+  }
+}
+
+function watchBlock() {
+  log.info('Start to check params');
+  checkParams();
+  const eth = new Eth(`${type}://${host}:${port}`);
+
+  watch(eth, address).then((txs) => {
+    log.info(`Your got total ${txs.length} transactions.`);
+    txs.forEach((tx) => {
+      log.info(`Tx hash: ${tx.hash}`);
+      log.info(`From: ${tx.from}`);
+      log.info(`To: ${tx.to}`);
+      log.info(`Value: ${tx.value}`);
+      log.info(`Nonce: ${tx.nonce}`);
+      log.info(`Data: ${tx.input}`);
+    });
+  }).catch((err) => {
+    log.error(`Watch error: ${err.message}`);
+  });
+}
+
+if (program.config !== undefined) {
+  // load config
+  let config = new Config();
+
+  config.load(program.config).then((configData) => {
+    if (configData.host) {
+      host = configData.host;
+    }
+    if (configData.port) {
+      port = configData.port;
+    }
+    if (configData.type) {
+      type = configData.type;
+    }
+  }).catch((err) => {
+    log.warn(`Load config failed: ${err.message}`);
+  }).then(() => {
+    watchBlock();
+  }).catch((err) => {
+    log.error(`Error: ${err.message}`);
+  });
+} else {
+  watchBlock();
+}

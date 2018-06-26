@@ -8,4 +8,5 @@ program
   .version(pkg.version)
   .command('config', 'Create the ethwatcher tool config.')
   .command('confirmed', 'Check the transaction is confirmed.')
+  .command('watch', 'Watch the latest block and find transactions related to the address.')
   .parse(process.argv);

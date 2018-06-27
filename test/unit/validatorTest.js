@@ -24,6 +24,8 @@ tape('lib/validator', (t) => {
   t.equals(true, validator.isType('ws'));
   t.equals(true, validator.isType('ipc'));
   t.equals(false, validator.isType('ethwatcher'));
+
+  // isTransactionHash
   [
     '0x73906248cc3fdcec3be2fdbdeba7b232aa4ef799101e145ea29b291125ea6c0c', '0x43af4d0034909bd1cda28064664cfe92fd729590f49e235ff4e90f9424a68588',
     '0x7ac8a56ce12cd0a6485c133708ef58c84562f4c532f46b319f291df5929276cd', '0xde7c85f9abbb25e775b724318bcd4dc7e79f12e3e338a9946df9c596d5e2123c',
@@ -41,6 +43,7 @@ tape('lib/validator', (t) => {
     t.equals(false, validator.isTransactionHash(txHash));
   });
 
+  // isAddress
   [
     '0x73906248cc3fdcec3be2fdbdeba7b232aa4ef799', '0x43af4d0034909bd1cda28064664cfe92fd729590',
     '0X7ac8a56ce12cd0a6485c133708ef58c84562f4c5', '0Xde7c85f9abbb25e775b724318bcd4dc7e79f12e3',
@@ -53,5 +56,11 @@ tape('lib/validator', (t) => {
   ].forEach((address) => {
     t.equals(false, validator.isAddress(address));
   });
+
+  // isSeconds
+  t.equals(true, validator.isSeconds('8'));
+  t.equals(true, validator.isSeconds(8));
+  t.equals(false, validator.isSeconds('0'));
+  t.equals(false, validator.isSeconds(0));
   t.end();
 });

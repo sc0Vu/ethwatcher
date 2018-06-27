@@ -17,12 +17,14 @@ program
   .option('-t, --type [type]', 'Ethereum blockchain rpc connection type.', 'http')
   .option('-c, --config [config]', 'Config file.')
   .option('-a, --address [address]', 'Ethereum address.')
+  .option('-s, --retrySeconds [retrySeconds]', 'Retry seconds to next rpc api call.', 1)
   .parse(process.argv);
 
 let host = program.host;
 let port = program.port;
 let type = program.type;
 let address = program.address;
+let retrySeconds = program.retrySeconds;
 
 function checkParams() {
   if (validator.isHost(host) !== true) {
@@ -45,6 +47,10 @@ function checkParams() {
     log.error('Please enter valid address.');
     process.exit();
   }
+  if (validator.isSeconds(retrySeconds) !== true) {
+    log.error('Please enter valid retrySeconds.');
+    process.exit();
+  }
 }
 
 function watchBlock() {
@@ -52,7 +58,7 @@ function watchBlock() {
   checkParams();
   const eth = new Eth(`${type}://${host}:${port}`);
 
-  watch(eth, address).then((txs) => {
+  watch(eth, address, retrySeconds).then((txs) => {
     log.info(`Your got total ${txs.length} transactions.`);
     txs.forEach((tx) => {
       log.info(`Tx hash: ${tx.hash}`);

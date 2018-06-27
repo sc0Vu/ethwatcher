@@ -16,8 +16,9 @@ program
   .option('-p, --port [port]', 'Ethereum blockchain rpc port.', 8545)
   .option('-t, --type [type]', 'Ethereum blockchain rpc connection type.', 'http')
   .option('-c, --config [config]', 'Config file.')
-  .option('-s, --txHash [txHash]', 'Ethereum transaction hash.')
+  .option('-x, --txHash [txHash]', 'Ethereum transaction hash.')
   .option('-n, --numberCount [numberCount]', 'Confirmed number count times.', 1)
+  .option('-s, --retrySeconds [retrySeconds]', 'Retry seconds to next rpc api call.', 1)
   .parse(process.argv);
 
 let host = program.host;
@@ -25,6 +26,7 @@ let port = program.port;
 let type = program.type;
 let txHash = program.txHash;
 let numberCount = program.numberCount;
+let retrySeconds = program.retrySeconds;
 
 function checkParams() {
   if (validator.isHost(host) !== true) {
@@ -47,6 +49,10 @@ function checkParams() {
     log.error('Please enter valid txHash.');
     process.exit();
   }
+  if (validator.isSeconds(retrySeconds) !== true) {
+    log.error('Please enter valid retrySeconds.');
+    process.exit();
+  }
 }
 
 function isTxConfirmed() {
@@ -54,7 +60,7 @@ function isTxConfirmed() {
   checkParams();
   const eth = new Eth(`${type}://${host}:${port}`);
 
-  confirmed(eth, txHash, numberCount).then((confirmed) => {
+  confirmed(eth, txHash, numberCount, retrySeconds).then((confirmed) => {
     if (confirmed === true) {
       log.info(`${txHash} had been confirmed ${numberCount} times.`);
     } else {

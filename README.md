@@ -38,7 +38,7 @@ $ ethwatcher config
 
 4. Confirm the transaction
 ```
-$ bin/ethwatcher confirmed -c ./ethwatcher.yaml -x 0x1b1c51f6c750443c4dad33765715bb674c624fc54219ac4f22c5e328ce57c126 -n 10000 -s 1
+$ ethwatcher confirmed -c ./ethwatcher.yaml -x 0x1b1c51f6c750443c4dad33765715bb674c624fc54219ac4f22c5e328ce57c126 -n 10000 -s 1
 
 [Info] Start to check params
 [Debug] Tx hash: 0x1b1c51f6c750443c4dad33765715bb674c624fc54219ac4f22c5e328ce57c126 Count: 10000
@@ -48,7 +48,7 @@ $ bin/ethwatcher confirmed -c ./ethwatcher.yaml -x 0x1b1c51f6c750443c4dad3376571
 
 5. Watch the address
 ```
-$ bin/ethwatcher watch -c ./ethwatcher.yaml -a 30b82c8694b59695d78f33a7ba1c2a55dfa618d5 -s 3 -l
+$ ethwatcher watch -c ./ethwatcher.yaml -a 30b82c8694b59695d78f33a7ba1c2a55dfa618d5 -s 3 -l
 
 [Info] Start to check params
 [Debug] Address: 0x30b82c8694b59695d78f33a7ba1c2a55dfa618d5
@@ -77,10 +77,10 @@ $ npm install ethwatcher
 ```
 
 2. Confirm the transaction
-```
-const Eth = require('web3-eth');
+```JS
+const EthProvider = require('ethwatcher').ethProvider;
 const confirmed = require('ethwatcher').confirmed; // const confirmed = require('ethwatcher/lib/confirmed');
-const eth = new Eth('http://localhost:8545');
+const eth = new EthProvider('http://localhost:8545');
 const txHash = '0xc16c42e9f1ab9031ca5125352df82587dfc4a066c3ace96a1037b7abb3f25b90';
 const numberCount = 100;
 const retrySeconds = 3;
@@ -98,10 +98,10 @@ confirmed(eth, txHash, numberCount, retrySeconds).then((confirmed) => {
 ```
 
 3. Watch the address
-```
-const Eth = require('web3-eth');
+```JS
+const EthProvider = require('ethwatcher').ethProvider;
 const watch = require('ethwatcher').watch;
-const eth = new Eth('http://localhost:8545');
+const eth = new EthProvider('http://localhost:8545');
 const address = '0x30b82c8694b59695d78f33a7ba1c2a55dfa618d5'; // const watch = require('ethwatcher/lib/watch');
 const retrySeconds = 3;
 

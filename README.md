@@ -104,8 +104,10 @@ const watch = require('ethwatcher').watch;
 const eth = new EthProvider('http://localhost:8545');
 const address = '0x30b82c8694b59695d78f33a7ba1c2a55dfa618d5'; // const watch = require('ethwatcher/lib/watch');
 const retrySeconds = 3;
+const watchFrom = false;
+const watchTo = true;
 
-watch(eth, address, retrySeconds).then((txs) => {
+watch(eth, address, retrySeconds, watchFrom, watchTo).then((txs) => {
   console.log(`Your got total ${txs.length} transactions.`);
   txs.forEach((tx) => {
     console.log(tx);
@@ -132,6 +134,8 @@ $ npm install
 ```
 4. Start to develop and have fun.
 
+# Demo
+![ethwatcher-demo](https://user-images.githubusercontent.com/10494397/42148654-af54c29e-7e05-11e8-9610-64ea3a0fbd05.gif)
 
 # Contribution
 Thank you for considering to help out with the source code!
@@ -139,4 +143,3 @@ Thank you for considering to help out with the source code!
 
 # License
 MIT
-

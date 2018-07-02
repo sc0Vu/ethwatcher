@@ -20,6 +20,8 @@ program
   .option('-a, --address [address]', 'Ethereum address.')
   .option('-s, --retrySeconds [retrySeconds]', 'Retry seconds to next rpc api call.', 1)
   .option('-l, --loopMode [loopMode]', 'Turn on loop mode.', false)
+  .option('-F, --watchFrom [watchFrom]', 'Watch from address.', false)
+  .option('-T, --watchTo [watchTo]', 'Watch to address.', false)
   .parse(process.argv);
 
 let host = program.host;
@@ -28,6 +30,8 @@ let type = program.type;
 let address = program.address;
 let retrySeconds = program.retrySeconds;
 let loopMode = program.loopMode;
+let watchFrom = program.watchFrom;
+let watchTo = program.watchTo;
 
 function checkParams() {
   if (validator.isHost(host) !== true) {
@@ -54,6 +58,10 @@ function checkParams() {
     log.error('Please enter valid retrySeconds.');
     process.exit();
   }
+  if (watchFrom === false && watchTo === false) {
+    log.error('Please set watchFrom or watchTo.');
+    process.exit();
+  }
 }
 
 function watchBlock() {
@@ -61,7 +69,7 @@ function watchBlock() {
   checkParams();
   const eth = new Eth(`${type}://${host}:${port}`);
 
-  watch(eth, address, retrySeconds).then((txs) => {
+  watch(eth, address, retrySeconds, watchFrom, watchTo).then((txs) => {
     log.info(`Your got total ${txs.length} transactions.`);
     txs.forEach((tx) => {
       log.info(`Tx hash: ${tx.hash}`);

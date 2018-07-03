@@ -1,11 +1,39 @@
 #!/usr/bin/env node
 
 const program = require('commander');
+const didYouMean = require('didyoumean');
 const pkg = require('../package.json');
+const log = require('../lib/log');
 
 program
   .version(pkg.version)
   .command('config', 'Create the ethwatcher tool config.')
   .command('confirmed', 'Check the transaction is confirmed.')
-  .command('watch', 'Watch the latest block and find transactions related to the address.')
-  .parse(process.argv);
+  .command('watch', 'Watch the latest block and find transactions related to the address.');
+
+program.command('*', {
+  noHelp: true
+}).action((command) => {
+  if (command === 'help') {
+    return;
+  }
+  log.error(`Unknown command: ${command}`);
+
+  const commandNames = program.commands
+    .map((c) => {
+      return c._name
+    })
+    .filter((name) => {
+      return name !== '*'
+    });
+
+  const closeMatch = didYouMean(command, commandNames);
+
+  if (closeMatch) {
+    log.error(`Did you mean ${closeMatch}?`);
+  }
+  program.help();
+  process.exit(1);
+});
+
+program.parse(process.argv);

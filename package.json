@@ -1,6 +1,6 @@
 {
   "name": "ethwatcher",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "Ethereum blockchain watcher library.",
   "main": "index.js",
   "scripts": {

@@ -31,7 +31,7 @@ $ ethwatcher
 
 3. Run ethwatcher config to generate config file
 ```
-$ ethwatcher config
+$ ethwatcher config -h https://host:port/path
 
 [Info] Config was saved: /Users/test/Desktop/t/ethwatcher.yaml
 ```
@@ -136,6 +136,11 @@ $ npm install
 
 # Demo
 ![ethwatcher-demo](https://user-images.githubusercontent.com/10494397/42148654-af54c29e-7e05-11e8-9610-64ea3a0fbd05.gif)
+
+# TODO
+
+- [ ] Watch multiple addresses at the same time
+- [ ] Update validator of URL format from RFC
 
 # Contribution
 Thank you for considering to help out with the source code!

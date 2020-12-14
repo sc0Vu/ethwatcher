@@ -3,6 +3,11 @@ const validator = require('../../lib/validator');
 
 tape('lib/validator', (t) => {
 
+  // isRPC
+  t.equals(true, validator.isRPC('http://localhost'));
+  t.equals(true, validator.isRPC('http://localhost:8545'));
+  t.equals(false, validator.isRPC('127.0.0.1'));
+
   // isHost
   t.equals(true, validator.isHost('localhost'));
   t.equals(true, validator.isHost('127.0.0.1'));

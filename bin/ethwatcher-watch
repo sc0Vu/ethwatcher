@@ -13,9 +13,7 @@ const setTimeout = require('../lib/setTimeout');
 
 program
   .version(pkg.version)
-  .option('-h, --host [host]', 'Ethereum blockchain rpc host.', 'localhost')
-  .option('-p, --port [port]', 'Ethereum blockchain rpc port.', 8545)
-  .option('-t, --type [type]', 'Ethereum blockchain rpc connection type.', 'http')
+  .option('-h, --rpc [rpc]', 'Ethereum blockchain rpc url (schema://host:port).', 'http://localhost:8545')
   .option('-c, --config [config]', 'Config file.')
   .option('-a, --address [address]', 'Ethereum address.')
   .option('-s, --retrySeconds [retrySeconds]', 'Retry seconds to next rpc api call.', 1)
@@ -24,9 +22,7 @@ program
   .option('-T, --watchTo [watchTo]', 'Watch to address.', false)
   .parse(process.argv);
 
-let host = program.host;
-let port = program.port;
-let type = program.type;
+let rpc = program.rpc;
 let address = program.address;
 let retrySeconds = program.retrySeconds;
 let loopMode = program.loopMode;
@@ -34,16 +30,8 @@ let watchFrom = program.watchFrom;
 let watchTo = program.watchTo;
 
 function checkParams() {
-  if (validator.isHost(host) !== true) {
-    log.error('Please enter valid host.');
-    process.exit();
-  }
-  if (validator.isPort(port) !== true) {
-    log.error('Please enter valid port.');
-    process.exit();
-  }
-  if (validator.isType(type) !== true) {
-    log.error('Please enter valid type.');
+  if (validator.isRPC(rpc) !== true) {
+    log.error('Please enter valid rpc.');
     process.exit();
   }
   if (address === undefined) {
@@ -59,15 +47,15 @@ function checkParams() {
     process.exit();
   }
   if (watchFrom === false && watchTo === false) {
-    log.error('Please set watchFrom or watchTo.');
-    process.exit();
+    // set default to watchFrom
+    watchFrom = true;
   }
 }
 
 function watchBlock() {
   log.info('Start to check params');
   checkParams();
-  const eth = new Eth(`${type}://${host}:${port}`);
+  const eth = new Eth(rpc);
 
   watch(eth, address, retrySeconds, watchFrom, watchTo).then((txs) => {
     log.info(`Your got total ${txs.length} transactions.`);
@@ -87,7 +75,13 @@ function watchBlock() {
       }, retrySeconds * 1000);
     }
   }).catch((err) => {
-    log.error(`Watch error: ${err.message}`);
+    if (err.message == 'Cannot get eth block number.') {
+      setTimeout(function () {
+        watchBlock();
+      }, retrySeconds * 1000);
+    } else {
+      log.error(`Watch error: ${err.message}`);
+    }
   });
 }
 
@@ -96,14 +90,8 @@ if (program.config !== undefined) {
   let config = new Config();
 
   config.load(program.config).then((configData) => {
-    if (configData.host) {
-      host = configData.host;
-    }
-    if (configData.port) {
-      port = configData.port;
-    }
-    if (configData.type) {
-      type = configData.type;
+    if (configData.rpc) {
+      rpc = configData.rpc;
     }
   }).catch((err) => {
     log.warn(`Load config failed: ${err.message}`);

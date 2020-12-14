@@ -10,30 +10,18 @@ const log = require('../lib/log');
 
 program
   .version(pkg.version)
-  .option('-h, --host [host]', 'Ethereum blockchain rpc host.', 'localhost')
-  .option('-p, --port [port]', 'Ethereum blockchain rpc port.', 8545)
-  .option('-t, --type [type]', 'Ethereum blockchain rpc connection type.', 'http')
+  .option('-h, --rpc [rpc]', 'Ethereum blockchain rpc url (schema://host:port).', 'http://localhost:8545')
   .option('-c, --chdir [chdir]', 'Config directory', process.cwd())
   .option('-f, --fileName [fileName]', 'Config file name', 'ethwatcher.yaml')
   .parse(process.argv);
 
-if (validator.isHost(program.host) !== true) {
-  log.error('Please enter valid host.');
-  process.exit();
-}
-if (validator.isPort(program.port) !== true) {
-  log.error('Please enter valid port.');
-  process.exit();
-}
-if (validator.isType(program.type) !== true) {
-  log.error('Please enter valid type.');
+if (validator.isRPC(program.rpc) !== true) {
+  log.error('Please enter valid rpc.');
   process.exit();
 }
 
 const config = new Config({
-  host: program.host,
-  port: parseInt(program.port, 10),
-  type: program.type
+  rpc: program.rpc,
 })
 const fileName = path.join(program.chdir, program.fileName);
 

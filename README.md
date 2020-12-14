@@ -141,6 +141,8 @@ $ npm install
 
 - [ ] Watch multiple addresses at the same time
 - [ ] Update validator of URL format from RFC
+- [ ] Add ens domain resolve
+- [ ] Add token resolve
 
 # Contribution
 Thank you for considering to help out with the source code!

@@ -75,7 +75,7 @@ function watchBlock() {
       }, retrySeconds * 1000);
     }
   }).catch((err) => {
-    if (err.message == 'Cannot get eth block number.') {
+    if (err.message.substr(0, 20) == 'Cannot get eth block') {
       setTimeout(function () {
         watchBlock();
       }, retrySeconds * 1000);

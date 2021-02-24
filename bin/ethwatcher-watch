@@ -5,10 +5,11 @@ const assert = require('assert');
 const path = require('path');
 const Config = require('simple-yaml-config');
 const pkg = require('../package.json');
-const validator = require('../lib/validator');
-const log = require('../lib/log');
-const Eth = require('web3-eth');
-const watch = require('../lib/watch');
+const ethwatcher = require("../index");
+const validator = ethwatcher.validator;
+const log = require("../lib/log");
+const watch = ethwatcher.watch;
+const Eth = ethwatcher.ethProvider;
 const setTimeout = require('../lib/setTimeout');
 
 program
@@ -57,7 +58,7 @@ function watchBlock() {
   checkParams();
   const eth = new Eth(rpc);
 
-  watch(eth, address, retrySeconds, watchFrom, watchTo).then((txs) => {
+    watch(eth, address, retrySeconds, watchFrom, watchTo).then((txs) => {
     log.info(`Your got total ${txs.length} transactions.`);
     txs.forEach((tx) => {
       log.info(`Tx hash: ${tx.hash}`);

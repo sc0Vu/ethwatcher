@@ -5,10 +5,11 @@ const assert = require('assert');
 const path = require('path');
 const Config = require('simple-yaml-config');
 const pkg = require('../package.json');
-const validator = require('../lib/validator');
-const log = require('../lib/log');
-const Eth = require('web3-eth');
-const confirmed = require('../lib/confirmed');
+const ethwatcher = require("../index");
+const validator = ethwatcher.validator;
+const log = require("../lib/log");
+const confirmed = ethwatcher.confirmed;
+const Eth = ethwatcher.ethProvider;
 
 program
   .version(pkg.version)

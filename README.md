@@ -1,5 +1,6 @@
 # ethwatcher
 [![Build Status](https://travis-ci.org/sc0Vu/ethwatcher.svg?branch=master)](https://travis-ci.org/sc0Vu/ethwatcher)
+[![Test](https://github.com/sc0Vu/ethwatcher/actions/workflows/npm.yml/badge.svg)](https://github.com/sc0Vu/ethwatcher/actions/workflows/npm.yml)
 [![codecov](https://codecov.io/gh/sc0Vu/ethwatcher/branch/master/graph/badge.svg)](https://codecov.io/gh/sc0Vu/ethwatcher)
 
 Ethereum blockchain watcher library.

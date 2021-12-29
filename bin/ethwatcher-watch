@@ -39,7 +39,7 @@ function checkParams() {
     log.error('Please enter address.');
     process.exit();
   }
-  if (validator.isAddress(address) !== true) {
+  if (!(validator.isAddress(address) === true || validator.isENSAddress(address) === true)) {
     log.error('Please enter valid address.');
     process.exit();
   }
@@ -53,12 +53,16 @@ function checkParams() {
   }
 }
 
-function watchBlock() {
+async function watchBlock() {
   log.info('Start to check params');
   checkParams();
   const eth = new Eth(rpc);
+  if (/.eth$/.test(address)) {
+    log.debug(`Lookup ENS: ${address}`);
+    address = await eth.resolveName(address);
+  }
 
-    watch(eth, address, retrySeconds, watchFrom, watchTo).then((txs) => {
+  watch(eth, address, retrySeconds, watchFrom, watchTo).then((txs) => {
     log.info(`Your got total ${txs.length} transactions.`);
     txs.forEach((tx) => {
       log.info(`Tx hash: ${tx.hash}`);
@@ -96,8 +100,8 @@ if (program.config !== undefined) {
     }
   }).catch((err) => {
     log.warn(`Load config failed: ${err.message}`);
-  }).then(() => {
-    watchBlock();
+  }).then(async () => {
+    await watchBlock();
   }).catch((err) => {
     log.error(`Error: ${err.message}`);
   });

@@ -49,7 +49,7 @@ $ ethwatcher confirmed -c ./ethwatcher.yaml -x 0x1b1c51f6c750443c4dad33765715bb6
 
 5. Watch the address
 ```
-$ ethwatcher watch -c ./ethwatcher.yaml -a 30b82c8694b59695d78f33a7ba1c2a55dfa618d5 -s 3 -l
+$ ethwatcher watch -c ./ethwatcher.yaml -a 0x30b82c8694b59695d78f33a7ba1c2a55dfa618d5 -s 3 -l
 
 [Info] Start to check params
 [Debug] Address: 0x30b82c8694b59695d78f33a7ba1c2a55dfa618d5
@@ -142,8 +142,10 @@ $ npm install
 
 - [ ] Watch multiple addresses at the same time
 - [ ] Update validator of URL format from RFC
-- [ ] Add ens domain resolve
-- [ ] Add token resolve
+- [x] Add ens domain resolver
+- [ ] Support ERC20 tokens
+- [ ] Support NFTs
+- [ ] Support DEX/Aggregator
 
 # Contribution
 Thank you for considering to help out with the source code!

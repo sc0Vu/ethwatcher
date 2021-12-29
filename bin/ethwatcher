@@ -33,7 +33,6 @@ program.command('*', {
     log.error(`Did you mean ${closeMatch}?`);
   }
   program.help();
-  process.exit(1);
 });
 
 program.parse(process.argv);

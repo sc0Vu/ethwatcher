@@ -62,6 +62,21 @@ tape('lib/validator', (t) => {
     t.equals(false, validator.isAddress(address));
   });
 
+  // isENSAddress
+  [
+    'taiwan.eth', 'japan.eth',
+    'usa.eth', 'canada.eth',
+  ].forEach((address) => {
+    t.equals(true, validator.isENSAddress(address));
+  });
+
+  [
+    'taiwan.ens', 'taiwan.xyz',
+    'taiwan.dns', 'taiwan.moon',
+  ].forEach((address) => {
+    t.equals(false, validator.isENSAddress(address));
+  });
+
   // isSeconds
   t.equals(true, validator.isSeconds('8'));
   t.equals(true, validator.isSeconds(8));

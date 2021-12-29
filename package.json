@@ -27,7 +27,7 @@
     "chalk": "^2.3.2",
     "commander": "^2.15.0",
     "didyoumean2": "^4.1.0",
-    "ethers": "^5.0.31",
+    "ethers": "^5.5.2",
     "istanbul": "^1.0.0-alpha.2",
     "simple-yaml-config": "^0.1.0"
   },
